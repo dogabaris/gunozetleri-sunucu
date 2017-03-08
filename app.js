@@ -1,77 +1,55 @@
-var express = require('express');
+/**
+ * app.js
+ *
+ * Use `app.js` to run your app without `sails lift`.
+ * To start the server, run: `node app.js`.
+ *
+ * This is handy in situations where the sails CLI is not relevant or useful.
+ *
+ * For example:
+ *   => `node app.js`
+ *   => `forever start app.js`
+ *   => `node debug app.js`
+ *   => `modulus deploy`
+ *   => `heroku scale`
+ *
+ *
+ * The same command-line arguments are supported, e.g.:
+ * `node app.js --silent --port=80 --prod`
+ */
 
-var app = express();
-var multer = require('multer')
-var constants = require('constants');
-var constant = require('./config/constants');
+// Ensure a "sails" can be located:
+(function() {
+  var sails;
+  try {
+    sails = require('sails');
+  } catch (e) {
+    console.error('To run an app using `node app.js`, you usually need to have a version of `sails` installed in the same directory as your app.');
+    console.error('To do that, run `npm install sails`');
+    console.error('');
+    console.error('Alternatively, if you have sails installed globally (i.e. you did `npm install -g sails`), you can use `sails lift`.');
+    console.error('When you run `sails lift`, your app will still use a local `./node_modules/sails` dependency if it exists,');
+    console.error('but if it doesn\'t, the app will run with the global sails instead!');
+    return;
+  }
 
-
-var port = process.env.PORT || 8042;
-var mongoose = require('mongoose');
-var passport = require('passport');
-var flash = require('connect-flash');
-var path = require('path');
-
-var morgan = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var session = require('express-session');
-var bodyParser = require('body-parser');
-var dateFormat = require('dateformat');
-var now = new Date();
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
-
-
-/***************Mongodb configuratrion********************/
-var mongoose = require('mongoose');
-var configDB = require('./config/database.js');
-//configuration ===============================================================
-mongoose.connect(configDB.url); // connect to our database
-
-
-require('./config/passport')(passport); // pass passport for configuration
-
-//set up our express application
-app.use(morgan('dev')); // log every request to the console
-app.use(cookieParser()); // read cookies (needed for auth)
-//app.use(bodyParser()); // get information from html forms
-
-//view engine setup
-app.use(express.static(path.join(__dirname, 'public')));
-app.set('views', path.join(__dirname, 'app/views'));
-app.set('view engine', 'ejs');
-//app.set('view engine', 'ejs'); // set up ejs for templating
-
-
-//required for passport
-//app.use(session({ secret: 'iloveyoudear...' })); // session secret
-
-app.use(session({
-    secret: 'I Love India...',
-    resave: true,
-    saveUninitialized: true
-}));
-
-app.use(passport.initialize());
-app.use(passport.session()); // persistent login sessions
-app.use(flash()); // use connect-flash for flash messages stored in session
-
-// routes ======================================================================
-require('./config/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
+  // Try to get `rc` dependency
+  var rc;
+  try {
+    rc = require('rc');
+  } catch (e0) {
+    try {
+      rc = require('sails/node_modules/rc');
+    } catch (e1) {
+      console.error('Could not find dependency: `rc`.');
+      console.error('Your `.sailsrc` file(s) will be ignored.');
+      console.error('To resolve this, run:');
+      console.error('npm install rc --save');
+      rc = function () { return {}; };
+    }
+  }
 
 
-//launch ======================================================================
-app.listen(port);
-console.log('The magic happens on port ' + port);
-
-//catch 404 and forward to error handler
-app.use(function (req, res, next) {
-    res.status(404).render('404', {title: "Sorry, page not found", session: req.sessionbo});
-});
-
-app.use(function (req, res, next) {
-    res.status(500).render('404', {title: "Sorry, page not found"});
-});
-exports = module.exports = app;
+  // Start server
+  sails.lift(rc('sails'));
+})();

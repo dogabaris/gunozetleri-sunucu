@@ -1,26 +1,13 @@
-var home = require('../app/controllers/home');
+module.exports.routes = {
 
-//you can include all your controllers
+  // HTML Views
+  '/': { view: 'homepage' },
+  'get /login': { view: 'user/login' },
+  'get /signup': { view: 'user/signup' },
+  '/welcome': { view: 'user/welcome' },
 
-module.exports = function (app, passport) {
-
-    app.get('/login', home.login);
-    app.get('/signup', home.signup);
-
-    app.get('/', home.loggedIn, home.home);//home
-    app.get('/home', home.loggedIn, home.home);//home
-
-    app.post('/signup', passport.authenticate('local-signup', {
-        successRedirect: '/home', // redirect to the secure profile section
-        failureRedirect: '/signup', // redirect back to the signup page if there is an error
-        failureFlash: true // allow flash messages
-    }));
-    // process the login form
-    app.post('/login', passport.authenticate('local-login', {
-        successRedirect: '/home', // redirect to the secure profile section
-        failureRedirect: '/login', // redirect back to the signup page if there is an error
-        failureFlash: true // allow flash messages
-    }));
-
-
-}
+  // Endpoints
+  'post /login': 'UserController.login',
+  'post /signup': 'UserController.signup',
+  '/logout': 'UserController.logout',
+};
