@@ -1,8 +1,6 @@
 /**
  * UserController
- *
- * @description :: Server-side logic for managing users
- * @help        :: See http://links.sailsjs.org/docs/controllers
+
  */
 
 module.exports = {
@@ -16,7 +14,7 @@ module.exports = {
     return res.login({
       email: req.param('email'),
       password: req.param('password'),
-      successRedirect: '/',
+      successRedirect: '/home',
       invalidRedirect: '/login'
     });
   },
@@ -75,4 +73,3 @@ module.exports = {
     });
   }
 };
-

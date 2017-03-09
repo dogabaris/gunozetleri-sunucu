@@ -1,19 +1,20 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Basic Login With Sails</title>
+    <title>Homepage</title>
 
     <!-- Viewport mobile tag for sensible mobile support -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <!--STYLES-->
-    
+    <link rel="stylesheet" href="/styles/bootstrap.min.css">
+    <link rel="stylesheet" href="/styles/importer.css">
     <!--STYLES END-->
   </head>
 
   <body>
 
-    <h1>Basic Login With Sails</h1>
+    <h1>Homepage</h1>
 
     <% if (req.session.me) { %>
     <a href="/logout">Logout</a>
@@ -23,7 +24,9 @@
 
 
     <!--SCRIPTS-->
-    <script src="/min/production.min.js"></script>
+    <script src="/js/dependencies/sails.io.js"></script>
+    <script src="/js/dependencies/jquery-3.1.1.slim.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
     <!--SCRIPTS END-->
   </body>
 </html>
