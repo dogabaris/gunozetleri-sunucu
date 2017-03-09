@@ -29,7 +29,7 @@ module.exports.connections = {
   *                                                                          *
   ***************************************************************************/
   localDiskDb: {
-    adapter: 'sails-mongo'//disk mongoya çevirdim
+    adapter: 'sails-disk'//diskteyken kendi .tmp klasöründe tutuyor veritabanını, sails-mongoya çevrildiğinde mongo serverına servis ediyor
   },
 
   /***************************************************************************

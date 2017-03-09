@@ -1,15 +1,15 @@
 {
-  "name": "Gun Ozetleri",
-  "private": true,
-  "version": "0.0.0",
-  "description": "Gun Ozetleri",
-  "keywords": [],
+  "name": "gunozetleri",
+  "version": "1.0.0",
+  "description": "gunozetleri",
+  "main": "app.js",
   "dependencies": {
-    "sails": "~0.11.4",
-    "sails-disk": "~0.10.0",
-    "rc": "~0.5.0",
-    "include-all": "~0.1.3",
-    "ejs": "~0.8.4",
+    "ejs": "^2.5.6",
+    "include-all": "^4.0.0",
+    "rc": "^1.1.7",
+    "sails": "^0.11.5",
+    "sails-disk": "^0.10.10",
+    "sails-mongo": "^0.12.2",
     "grunt": "0.4.2",
     "grunt-sync": "~0.0.4",
     "grunt-contrib-copy": "~0.5.0",
@@ -20,18 +20,25 @@
     "grunt-contrib-watch": "~0.5.3",
     "grunt-contrib-uglify": "~0.4.0",
     "grunt-contrib-cssmin": "~0.9.0",
-    "grunt-contrib-less": "0.11.1",
+    "grunt-contrib-less": "~0.10.0",
     "grunt-contrib-coffee": "~0.10.1"
   },
   "scripts": {
-    "start": "sails lift",
-    "debug": "sails debug app.js"
+    "start": "node app.js --silent --port=80 --prod",
+    "debug": "node debug app.js --silent --port=80 --prod"
   },
-  "main": "app.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "sails app.js"
+  },
   "repository": {
     "type": "git",
-    "url": "git://github.com/dogabaris/gunozetleri.git"
+    "url": "git+https://github.com/dogabaris/gunozetleri-sunucu.git"
   },
-  "author": "dogabaris",
-  "license": "ISC"
+  "author": "DogaBaris",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dogabaris/gunozetleri-sunucu/issues"
+  },
+  "homepage": "https://github.com/dogabaris/gunozetleri-sunucu#readme"
 }
