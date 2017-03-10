@@ -1,16 +1,156 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="/styles/bootstrap.min.css">
-<link rel="stylesheet" href="/styles/importer.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="https:////code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+
+<style>
+    label, input { display:block; }
+    h1 { font-size: 1.2em; margin: .6em 0; }
+    .ui-dialog .ui-state-error { padding: .3em; }
+    .validateTips { border: 1px solid transparent; padding: 0.3em; }
+</style>
+
+<script>
+  $( function() {
+    var dialog, form,
+
+      emailRegex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/,
+      name = $( "#name" ),
+      email = $( "#email" ),
+      password = $( "#password" ),
+      allFields = $( [] ).add( name ).add( email ).add( password ),
+      tips = $( ".validateTips" );
+
+    function updateTips( t ) {
+      tips
+        .text( t )
+        .addClass( "ui-state-highlight" );
+      setTimeout(function() {
+        tips.removeClass( "ui-state-highlight", 1500 );
+      }, 500 );
+    }
+
+    function checkLength( o, n, min, max ) {
+      if ( o.val().length > max || o.val().length < min ) {
+        o.addClass( "ui-state-error" );
+        updateTips( "Length of " + n + " must be between " +
+          min + " and " + max + "." );
+        return false;
+      } else {
+        return true;
+      }
+    }
+
+    function checkRegexp( o, regexp, n ) {
+      if ( !( regexp.test( o.val() ) ) ) {
+        o.addClass( "ui-state-error" );
+        updateTips( n );
+        return false;
+      } else {
+        return true;
+      }
+    }
+
+    function addUser() {
+      var valid = true;
+      allFields.removeClass( "ui-state-error" );
+
+      valid = valid && checkLength( name, "username", 3, 16 );
+      valid = valid && checkLength( email, "email", 6, 80 );
+      valid = valid && checkLength( password, "password", 5, 16 );
+
+      valid = valid && checkRegexp( name, /^[a-z]([0-9a-z_\s])+$/i, "Username may consist of a-z, 0-9, underscores, spaces and must begin with a letter." );
+      valid = valid && checkRegexp( email, emailRegex, "eg. ui@jquery.com" );
+      valid = valid && checkRegexp( password, /^([0-9a-zA-Z])+$/, "Password field only allow : a-z 0-9" );
+
+      if ( valid ) {
+        $( "#tablo tbody" ).append( "<tr>" +
+          "<td>" + name.val() + "</td>" +
+          "<td>" + email.val() + "</td>" +
+          "<td>" + password.val() + "</td>" +
+        "</tr>" );
+        dialog.dialog( "close" );
+      }
+      return valid;
+    }
+
+    dialog = $( "#dialog-form" ).dialog({
+      autoOpen: false,
+      height: 400,
+      width: 350,
+      modal: true,
+      buttons: {
+        "Gün Özetini Düzenle": addUser,
+        Cancel: function() {
+          dialog.dialog( "close" );
+        }
+      },
+      close: function() {
+        form[ 0 ].reset();
+        allFields.removeClass( "ui-state-error" );
+      }
+    });
+
+    form = dialog.find( "form" ).on( "submit", function( event ) {
+      event.preventDefault();
+      addUser();
+    });
+
+    $( "#yeni-ozet" ).button().on( "click", function() {
+      dialog.dialog( "open" );
+    });
+  });
+</script>
+
 </head>
 
-
 <body>
-<div class="container">
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#menu-div" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">Gün Özetleri</a>
+      </div>
+
+      <div class="collapse navbar-collapse" id="menu-div">
+        <ul class="nav navbar-nav">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Menü <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="#">Menu1</a></li>
+              <li><a href="#">Menu2</a></li>
+              <li><a href="#">Menu3</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="/logout">Çıkış</a></li>
+            </ul>
+          </li>
+          <li class="active"><a onclick="addUser" href="#">Yeni<span class="sr-only">(current)</span></a></li>
+          <li><a href="#">İstatistik</a></li>
+        </ul>
+        <form class="navbar-form navbar-right">
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="">
+          </div>
+          <button type="submit" class="btn btn-default">Ara</button>
+        </form>
+      </div>
+
+    </div>
+  </nav>
+
+<div id="tablo-div" class="ui-widget">
   <h2>Gün Özetleri</h2>
   <p>Gönderilen Gün Özetleri</p>
-  <table class="table">
+  <table id="tablo" cellspacing="0" width="100%" class="table table-striped">
     <thead>
       <tr>
         <th>Başlık</th>
@@ -18,6 +158,8 @@
         <th>Görsel</th>
         <th>Saat</th>
         <th>Tarih</th>
+        <th>Durum</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -27,15 +169,53 @@
         <td>Resim</td>
         <td>20:07</td>
         <td>09.03.2017</td>
+        <td>Beklemede</td>
+        <td><a href="#" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-edit"></span></a><td>
+      </tr>
+      <tr>
+        <td>Başlık</td>
+        <td>Haber içeriği ve link</td>
+        <td>Resim</td>
+        <td>20:07</td>
+        <td>09.03.2017</td>
+        <td>Beklemede</td>
+        <td><a href="#" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-edit"></span></a><td>
+      </tr>
+      <tr>
+        <td>Başlık</td>
+        <td>Haber içeriği ve link</td>
+        <td>Resim</td>
+        <td>20:07</td>
+        <td>09.03.2017</td>
+        <td>Beklemede</td>
+        <td><a href="#" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-edit"></span></a><td>
       </tr>
     </tbody>
   </table>
 </div>
+
+<div id="dialog-form" title="Create new user" style="display:none;">
+  <p class="validateTips">All form fields are required.</p>
+
+  <form>
+    <fieldset>
+      <label for="name">Name</label>
+      <input type="text" name="name" id="name" value="Jane Smith" class="text ui-widget-content ui-corner-all">
+      <label for="email">Email</label>
+      <input type="text" name="email" id="email" value="jane@smith.com" class="text ui-widget-content ui-corner-all">
+      <label for="password">Password</label>
+      <input type="password" name="password" id="password" value="xxxxxxx" class="text ui-widget-content ui-corner-all">
+
+      <!-- Allow form submission with keyboard without duplicating the dialog button -->
+      <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+    </fieldset>
+  </form>
+</div>
+
 
 <!--SCRIPTS-->
 <script src="/js/dependencies/sails.io.js"></script>
 <script src="/js/dependencies/jquery-3.1.1.slim.min.js"></script>
 <script src="/js/bootstrap.min.js"></script>
 <!--SCRIPTS END-->
-
 </body>
