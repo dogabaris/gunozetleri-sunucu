@@ -71,5 +71,20 @@ module.exports = {
       // Otherwise if this is an HTML-wanting browser, redirect to /welcome.
       return res.redirect('/welcome');
     });
+  },
+
+  /**
+   * `UserController.control()`
+   */
+
+  control: function(req, res){
+
+      if(req.session.me){
+        res.view('user/home');
+      }
+      else{
+        res.redirect('/login');
+      }
+
   }
 };
