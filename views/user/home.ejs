@@ -1,17 +1,12 @@
+<html lang="UTF-8">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<link rel="stylesheet" href="https:////code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-
-
-<style>
-    label, input { display:block; }
-    h1 { font-size: 1.2em; margin: .6em 0; }
-    .ui-dialog .ui-state-error { padding: .3em; }
-    .validateTips { border: 1px solid transparent; padding: 0.3em; }
-</style>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
 
 <script>
   $( function() {
@@ -83,8 +78,8 @@
       width: 350,
       modal: true,
       buttons: {
-        "Gün Özetini Düzenle": addUser,
-        Cancel: function() {
+        "Yayınla": addUser,
+        Kapat: function() {
           dialog.dialog( "close" );
         }
       },
@@ -99,15 +94,18 @@
       addUser();
     });
 
-    $( "#yeni-ozet" ).button().on( "click", function() {
+    $( "#yenibutton" ).button().on( "click", function() {
       dialog.dialog( "open" );
     });
-  });
-</script>
+  } );
+  </script>
+
 
 </head>
 
 <body>
+
+
   <nav class="navbar navbar-default">
     <div class="container-fluid">
 
@@ -133,7 +131,7 @@
               <li><a href="/logout">Çıkış</a></li>
             </ul>
           </li>
-          <li class="active"><a onclick="addUser" href="#">Yeni<span class="sr-only">(current)</span></a></li>
+          <li class="active"><a href="#" id="yenibutton">Yeni<span class="sr-only">(current)</span></a></li>
           <li><a href="#">İstatistik</a></li>
         </ul>
         <form class="navbar-form navbar-right">
@@ -148,18 +146,18 @@
   </nav>
 
 <div id="tablo-div" class="ui-widget">
-  <h2>Gün Özetleri</h2>
-  <p>Gönderilen Gün Özetleri</p>
+
   <table id="tablo" cellspacing="0" width="100%" class="table table-striped">
     <thead>
       <tr>
         <th>Başlık</th>
         <th>Haber</th>
         <th>Görsel</th>
-        <th>Saat</th>
         <th>Tarih</th>
         <th>Durum</th>
+        <th>Ekleyen</th>
         <th></th>
+
       </tr>
     </thead>
     <tbody>
@@ -167,55 +165,84 @@
         <td>Başlık</td>
         <td>Haber içeriği ve link</td>
         <td>Resim</td>
-        <td>20:07</td>
-        <td>09.03.2017</td>
+        <td>20:07 09.03.2017</td>
         <td>Beklemede</td>
+        <td>Admin</td>
         <td><a href="#" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-edit"></span></a><td>
       </tr>
       <tr>
         <td>Başlık</td>
         <td>Haber içeriği ve link</td>
         <td>Resim</td>
-        <td>20:07</td>
-        <td>09.03.2017</td>
+        <td>20:07 09.03.2017</td>
         <td>Beklemede</td>
+        <td>Admin</td>
         <td><a href="#" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-edit"></span></a><td>
       </tr>
       <tr>
         <td>Başlık</td>
         <td>Haber içeriği ve link</td>
         <td>Resim</td>
-        <td>20:07</td>
-        <td>09.03.2017</td>
+        <td>20:07 09.03.2017</td>
         <td>Beklemede</td>
+        <td>Admin</td>
         <td><a href="#" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-edit"></span></a><td>
       </tr>
     </tbody>
   </table>
 </div>
 
-<div id="dialog-form" title="Create new user" style="display:none;">
-  <p class="validateTips">All form fields are required.</p>
+
+<div id="dialog-form" title="Yeni Özet">
+  <p class="validateTips">Alanlar doldurulmalıdır.</p>
 
   <form>
-    <fieldset>
-      <label for="name">Name</label>
-      <input type="text" name="name" id="name" value="Jane Smith" class="text ui-widget-content ui-corner-all">
-      <label for="email">Email</label>
-      <input type="text" name="email" id="email" value="jane@smith.com" class="text ui-widget-content ui-corner-all">
-      <label for="password">Password</label>
-      <input type="password" name="password" id="password" value="xxxxxxx" class="text ui-widget-content ui-corner-all">
-
-      <!-- Allow form submission with keyboard without duplicating the dialog button -->
+     <div class="form-group">
+      <label for="baslik">Başlık</label>
+      <input type="text" name="baslik" id="baslik" class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="haber">Haber</label>
+      <textarea class="form-control" rows="5" name="haber" id="haber" ></textarea>
+    </div>
+    <div class="form-group">
+      <label for="gorsel">Görsel</label>
+      <input type="text" name="gorsel" id="gorsel" class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="tarih">Tarih</label>
+      <div class='input-group date' id='tarih'>
+          <input type='text' class="form-control" />
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-calendar"></span>
+            </span>
+      </div>
+      <script>
+            $(function () {
+                $('#tarih').datetimepicker({
+                    locale: 'tr',
+                });
+            });
+      </script>
+    </div>
+    <div class="form-group">
+      <label for="ekleyen">Ekleyen</label>
+      <input type="password" name="ekleyen" id="ekleyen" class="form-control">
+    </div>
       <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
-    </fieldset>
   </form>
 </div>
 
 
+
 <!--SCRIPTS-->
 <script src="/js/dependencies/sails.io.js"></script>
-<script src="/js/dependencies/jquery-3.1.1.slim.min.js"></script>
+<script src="/js/dependencies/jquery-3.1.1.min.js"></script>
+<script src="/js/dependencies/jquery-ui.min.js"></script>
 <script src="/js/bootstrap.min.js"></script>
+<script src="/js/dependencies/bootstrap-datetimepicker.min.js"></script>
 <!--SCRIPTS END-->
+
+
 </body>
+</html>

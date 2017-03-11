@@ -1,11 +1,10 @@
 module.exports.routes = {
 
-  // HTML Views
+  // Views
   '/': { view: 'homepage' },
   'get /login': { view: 'user/login' },
   'get /signup': { view: 'user/signup' },
   '/welcome': { view: 'user/welcome' },
-  //'get /home': { view: 'user/home' },
 
   // Endpoints
   'post /login': 'UserController.login',
@@ -13,5 +12,5 @@ module.exports.routes = {
   '/logout': 'UserController.logout',
   '/home': 'UserController.control'
 
-  //'post /home': 'sessionAuth.signup'
+  
 };
