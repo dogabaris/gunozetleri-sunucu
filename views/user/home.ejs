@@ -10,112 +10,139 @@
 <script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment-with-locales.min.js"></script>
 <script>
-  $( function() {
-    var dialog, form,
+$( function() {
+  var dialog, form,
 
-      emailRegex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/,
-      name = $( "#name" ),
-      email = $( "#email" ),
-      password = $( "#password" ),
-      allFields = $( [] ).add( name ).add( email ).add( password ),
-      tips = $( ".validateTips" );
+    emailRegex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/,
+    baslik = $( "#baslik" ),
+    haber = $( "#haber" ),
+    gorsel = $( "#gorsel" ),
+    tarih = $( "#tarih" ).find("input"),
+    allFields = $( [] ).add( baslik ).add( haber ).add( gorsel ).add( tarih ),
+    tips = $( ".svalidateTips" );
 
-    function updateTips( t ) {
-      tips
-        .text( t )
-        .addClass( "ui-state-highlight" );
-      setTimeout(function() {
-        tips.removeClass( "ui-state-highlight", 1500 );
-      }, 500 );
+  function updateTips( t ) {
+    tips
+      .text( t )
+      .addClass( "ui-state-highlight" );
+    setTimeout(function() {
+      tips.removeClass( "ui-state-highlight", 1500 );
+    }, 500 );
+  }
+
+  function checkRegexp( o, regexp, n ) {
+    if ( !( regexp.test( o.val() ) ) ) {
+      o.addClass( "ui-state-error" );
+      updateTips( n );
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  function checkForm(form)
+  {
+    // validation fails if the input is blank
+    if(form.inputfield.value == "") {
+      alert("Error: Input is empty!");
+      form.inputfield.focus();
+      return false;
     }
 
-    function checkLength( o, n, min, max ) {
-      if ( o.val().length > max || o.val().length < min ) {
-        o.addClass( "ui-state-error" );
-        updateTips( "Length of " + n + " must be between " +
-          min + " and " + max + "." );
-        return false;
-      } else {
-        return true;
+    // regular expression to match only alphanumeric characters and spaces
+    var re = /^[\w ]+$/;
+
+    // validation fails if the input doesn't match our regular expression
+    if(!re.test(form.inputfield.value)) {
+      alert("Karakter hatası!");
+      form.inputfield.focus();
+      return false;
+    }
+
+    // validation was successful
+    return true;
+  }
+
+  function Validate()
+  {
+      var msg= "",
+          fields = document.getElementById("dialog-form").getElementsByTagName("input");
+
+      for (var i=0; i<fields.length; i++){
+          if (fields[i].value == "")
+              msg += fields[i].name + ' boş bırakıldı. \n';
       }
-    }
 
-    function checkRegexp( o, regexp, n ) {
-      if ( !( regexp.test( o.val() ) ) ) {
-        o.addClass( "ui-state-error" );
-        updateTips( n );
-        return false;
-      } else {
-        return true;
+      if(msg) {
+          alert(msg);
+          return false;
       }
-    }
+      else
+          return true;
+  }
 
-    function addUser() {
-      var valid = true;
-      allFields.removeClass( "ui-state-error" );
+  function ozetEkle() {
 
-      valid = valid && checkLength( name, "username", 3, 16 );
-      valid = valid && checkLength( email, "email", 6, 80 );
-      valid = valid && checkLength( password, "password", 5, 16 );
-
-      valid = valid && checkRegexp( name, /^[a-z]([0-9a-z_\s])+$/i, "Username may consist of a-z, 0-9, underscores, spaces and must begin with a letter." );
-      valid = valid && checkRegexp( email, emailRegex, "eg. ui@jquery.com" );
-      valid = valid && checkRegexp( password, /^([0-9a-zA-Z])+$/, "Password field only allow : a-z 0-9" );
-
-      if ( valid ) {
+     if(Validate()){
         $( "#tablo tbody" ).append( "<tr>" +
-          "<td>" + name.val() + "</td>" +
-          "<td>" + email.val() + "</td>" +
-          "<td>" + password.val() + "</td>" +
+          "<td>" + baslik.val() + "</td>" +
+          "<td>" + haber.val() + "</td>" +
+          "<td>" + gorsel.val() + "</td>" +
+          "<td>" + tarih.val() + "</td>" +
+          "<td>" + "Beklemede" + "</td>" +
+          "<td>" + "Admin" + "</td>" +
+          "<td>" + '<a href="#" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-edit">' + "</td>" +
         "</tr>" );
         dialog.dialog( "close" );
       }
-      return valid;
-    }
 
-    dialog = $( "#dialog-form" ).dialog({
-      autoOpen: false,
-      height: 400,
-      width: 350,
-      modal: true,
-      buttons: {
-        "Yayınla": addUser,
-        Kapat: function() {
-          dialog.dialog( "close" );
-        }
-      },
-      close: function() {
-        form[ 0 ].reset();
-        allFields.removeClass( "ui-state-error" );
+  }
+
+  dialog = $( "#dialog-form" ).dialog({
+    autoOpen: false,
+    height: 400,
+    width: 350,
+    modal: true,
+    buttons: {
+      "Yayınla": ozetEkle,
+      Kapat: function() {
+        dialog.dialog( "close" );
       }
-    });
+    },
+    close: function() {
+      form[ 0 ].reset();
+      allFields.removeClass( "ui-state-error" );
+    }
+  });
 
-    form = dialog.find( "form" ).on( "submit", function( event ) {
-      event.preventDefault();
-      addUser();
-    });
+  form = dialog.find( "form" ).on( "submit", function( event ) {
+    event.preventDefault();
+    ozetEkle();
+  });
 
-    $( "#yenibutton" ).button().on( "click", function() {
-      dialog.dialog( "open" );
-    });
+  $( "#yenibutton" ).button().on( "click", function() {
+    dialog.dialog( "open" );
+  });
 
 
-  } );
-  </script>
+} );
+</script>
 
-  <script type="text/javascript">
+</script>
+
+<script type="text/javascript">
   $(document).ready(function() {
-          $(function () {
+        $(function () {
 
-              $('#tarih').datetimepicker({
-                  useCurrent: true,
-                  format: 'D/MM/YYYY HH:mm',
-                  locale: 'tr'
-              });
+            $('#tarih').datetimepicker({
+                useCurrent: true,
+                format: 'D/MM/YYYY HH:mm',
+                locale: 'tr'
+            });
 
-          });
-      });
-  </script>
+        });
+  });
+</script>
 
 </head>
 
@@ -215,7 +242,7 @@
   <form>
      <div class="form-group">
       <label for="baslik">Başlık</label>
-      <input type="text" name="baslik" id="baslik" class="form-control">
+      <input type="text" name="baslik" id="baslik" class="form-control" >
     </div>
     <div class="form-group">
       <label for="haber">Haber</label>
@@ -230,16 +257,15 @@
       <div class='input-group date' id='tarih'>
           <input type='text' class="form-control" />
             <span class="input-group-addon">
-                <span class="glyphicon glyphicon-calendar"></span>
+                <span class="glyphicon glyphicon-calendar" ></span>
             </span>
       </div>
-
     </div>
     <div class="form-group">
       <label for="ekleyen">Ekleyen</label>
-      <label>name</label>
+      <input type='text' class="form-control" name="ekleyen" id="ekleyen"/>
     </div>
-      <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+      <button type="submit" tabindex="-1" style="position:absolute; top:-1000px">
   </form>
 </div>
 
@@ -250,6 +276,7 @@
 <script src="/js/dependencies/bootstrap.min.js"></script>
 <script src="/js/dependencies/bootstrap-datetimepicker.min.js"></script>
 <!--SCRIPTS END-->
+
 
 
 </body>

@@ -91,12 +91,9 @@ module.exports = {
    * `UserController.getName()`
    */
    getname: function(req, res){
-     var myQuery = User.find();
-     myQuery.where({'name':{startsWith:'d'}});
+   var tagline = "deneme";
 
-     myQuery.exec(function callBack(err,results){
-         console.log(results)
-         });
+    res.render('user/home', tagline);
    }
 
 
