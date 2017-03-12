@@ -79,12 +79,25 @@ module.exports = {
 
   control: function(req, res){
 
-      if(req.session.me){
-        res.view('user/home');
-      }
-      else{
-        res.redirect('/login');
-      }
+    if(req.session.me){
+      res.view('user/home');
+    }
+    else{
+      res.redirect('/login');
+    }
+  },
 
-  }
+  /**
+   * `UserController.getName()`
+   */
+   getname: function(req, res){
+     var myQuery = User.find();
+     myQuery.where({'name':{startsWith:'d'}});
+
+     myQuery.exec(function callBack(err,results){
+         console.log(results)
+         });
+   }
+
+
 };

@@ -3,11 +3,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
 
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment-with-locales.min.js"></script>
 <script>
   $( function() {
     var dialog, form,
@@ -97,9 +98,24 @@
     $( "#yenibutton" ).button().on( "click", function() {
       dialog.dialog( "open" );
     });
+
+
   } );
   </script>
 
+  <script type="text/javascript">
+  $(document).ready(function() {
+          $(function () {
+
+              $('#tarih').datetimepicker({
+                  useCurrent: true,
+                  format: 'D/MM/YYYY HH:mm',
+                  locale: 'tr'
+              });
+
+          });
+      });
+  </script>
 
 </head>
 
@@ -217,29 +233,21 @@
                 <span class="glyphicon glyphicon-calendar"></span>
             </span>
       </div>
-      <script>
-            $(function () {
-                $('#tarih').datetimepicker({
-                    locale: 'tr',
-                });
-            });
-      </script>
+
     </div>
     <div class="form-group">
       <label for="ekleyen">Ekleyen</label>
-      <input type="password" name="ekleyen" id="ekleyen" class="form-control">
+      <label>name</label>
     </div>
       <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
   </form>
 </div>
 
 
-
 <!--SCRIPTS-->
 <script src="/js/dependencies/sails.io.js"></script>
-<script src="/js/dependencies/jquery-3.1.1.min.js"></script>
 <script src="/js/dependencies/jquery-ui.min.js"></script>
-<script src="/js/bootstrap.min.js"></script>
+<script src="/js/dependencies/bootstrap.min.js"></script>
 <script src="/js/dependencies/bootstrap-datetimepicker.min.js"></script>
 <!--SCRIPTS END-->
 
