@@ -10,7 +10,7 @@ module.exports.routes = {
   'post /login': 'UserController.login',
   'post /signup': 'UserController.signup',
   '/logout': 'UserController.logout',
-  '/home': 'UserController.control'
-
+  'get /home': 'UserController.control',
+  'post /home': 'UserController.new'
 
 };

@@ -84,6 +84,12 @@ $( function() {
   function ozetEkle() {
 
      if(Validate()){
+
+       $.post( "/home", { title: baslik.val(), news: haber.val(), imagePath: gorsel.val(), date: tarih.val(), state: "Beklemede", who: "Admin" })
+        .done(function( data ) {
+         alert( "Data Loaded: " + data );
+       });
+
         $( "#tablo tbody" ).append( "<tr>" +
           "<td>" + baslik.val() + "</td>" +
           "<td>" + haber.val() + "</td>" +
@@ -123,7 +129,6 @@ $( function() {
   $( "#yenibutton" ).button().on( "click", function() {
     dialog.dialog( "open" );
   });
-
 
 } );
 </script>
@@ -234,9 +239,9 @@ $( function() {
     </tbody>
   </table>
 </div>
+<span id="sonuc">Sonuç</span>
 
-
-<div id="dialog-form" title="Yeni Özet">
+<div id="dialog-form" title="Yeni Özet" hidden="hidden">
   <p class="validateTips">Alanlar doldurulmalıdır.</p>
 
   <form>
