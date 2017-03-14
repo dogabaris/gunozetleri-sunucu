@@ -41,12 +41,16 @@ module.exports = {
 
   edit: function(){
 
-  }
+  },
 
   getNews: function (inputs, cb) {
-    // Create a user
-    Ozet.findAll({
-      
+    Ozet.find({
+      title: inputs.title,
+      news: inputs.news,
+      imagePath: inputs.imagePath,
+      date: inputs.date,
+      state: inputs.state,
+      who: inputs.who
     })
     .exec(cb);
   }

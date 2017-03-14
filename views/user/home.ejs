@@ -9,6 +9,7 @@
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment-with-locales.min.js"></script>
+
 <script>
 $( function() {
   var dialog, form,
@@ -81,11 +82,13 @@ $( function() {
           return true;
   }
 
+
+
   function ozetEkle() {
 
      if(Validate()){
 
-       $.post( "/home", { title: baslik.val(), news: haber.val(), imagePath: gorsel.val(), date: tarih.val(), state: "Beklemede", who: "Admin" })
+       $.post( "/home/new", { title: baslik.val(), news: haber.val(), imagePath: gorsel.val(), date: tarih.val(), state: "Beklemede", who: "Admin" })
         .done(function( data ) {
          alert( "Data Loaded: " + data );
        });
@@ -205,41 +208,24 @@ $( function() {
         <th>Durum</th>
         <th>Ekleyen</th>
         <th></th>
-
       </tr>
     </thead>
     <tbody>
+      <% News.forEach(function(New){ %>
       <tr>
-        <td>Başlık</td>
-        <td>Haber içeriği ve link</td>
-        <td>Resim</td>
-        <td>20:07 09.03.2017</td>
-        <td>Beklemede</td>
-        <td>Admin</td>
+        <td><%= New.title %></td>
+        <td><%= New.news %></td>
+        <td><%= New.imagePath %></td>
+        <td><%= New.date %></td>
+        <td><%= New.state %></td>
+        <td><%= New.who %></td>
         <td><a href="#" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-edit"></span></a><td>
       </tr>
-      <tr>
-        <td>Başlık</td>
-        <td>Haber içeriği ve link</td>
-        <td>Resim</td>
-        <td>20:07 09.03.2017</td>
-        <td>Beklemede</td>
-        <td>Admin</td>
-        <td><a href="#" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-edit"></span></a><td>
-      </tr>
-      <tr>
-        <td>Başlık</td>
-        <td>Haber içeriği ve link</td>
-        <td>Resim</td>
-        <td>20:07 09.03.2017</td>
-        <td>Beklemede</td>
-        <td>Admin</td>
-        <td><a href="#" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-edit"></span></a><td>
-      </tr>
+      <% }); %>
     </tbody>
   </table>
 </div>
-<span id="sonuc">Sonuç</span>
+
 
 <div id="dialog-form" title="Yeni Özet" hidden="hidden">
   <p class="validateTips">Alanlar doldurulmalıdır.</p>

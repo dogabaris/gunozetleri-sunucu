@@ -107,34 +107,10 @@ module.exports = {
       date: req.param('date'),
       state: req.param('state'),
       who: req.param('who')
-    }, function (err, new) {
-
-      if (err) return res.negotiate(err);
-
-      req.session.me = new.id;
-
-      if (req.wantsJSON) {
-        return res.ok('Başarıyla Eklendi!');
-      }
-
-      return res.view('user/home');
-    });
-  },
-
-  getNews: function(req, res){
-    Ozet.getNews({
-      title: req.param('title'),
-      news: req.param('news'),
-      imagePath: req.param('imagePath'),
-      date: req.param('date'),
-      state: req.param('state'),
-      who: req.param('who')
     }, function (err, news) {
 
       if (err) return res.negotiate(err);
 
-      req.session.me = news.id;
-
       if (req.wantsJSON) {
         return res.ok('Başarıyla Eklendi!');
       }
@@ -143,5 +119,14 @@ module.exports = {
     });
   },
 
+  /**
+   * `UserController.getNews()`
+   */
+  getNews: function(req, res){
+    Ozet.find().exec(function(err, News){
+
+      res.view('user/home', { News: News });
+    });
+  }
 
 };

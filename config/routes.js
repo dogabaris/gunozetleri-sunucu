@@ -11,6 +11,8 @@ module.exports.routes = {
   'post /signup': 'UserController.signup',
   '/logout': 'UserController.logout',
   'get /home': 'UserController.control',
-  'post /home': 'UserController.new'
+  'get /home': 'UserController.getNews',
+  'post /home/new': 'UserController.new'
+
 
 };

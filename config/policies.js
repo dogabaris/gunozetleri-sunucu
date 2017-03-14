@@ -25,7 +25,10 @@ module.exports.policies = {
     '*': 'isAuthenticated',
     login: true,
     signup: true,
-    control: true
+    control: true,
+    new: true,
+    getName: true,
+    getNews: true
   }
 
 };
