@@ -44,15 +44,7 @@ module.exports = {
   },
 
   getNews: function (inputs, cb) {
-    Ozet.find({
-      title: inputs.title,
-      news: inputs.news,
-      imagePath: inputs.imagePath,
-      date: inputs.date,
-      state: inputs.state,
-      who: inputs.who
-    })
-    .exec(cb);
+    Ozet.find().exec(cb);
   }
 
 };

@@ -77,10 +77,11 @@ module.exports = {
    * `UserController.control()`
    */
 
-  control: function(req, res){
+  checkSession: function(req, res){
 
     if(req.session.me){
-      res.view('user/home');
+      this.getNews(req,res);
+      //res.view('user/home');
     }
     else{
       res.redirect('/login');
@@ -124,7 +125,6 @@ module.exports = {
    */
   getNews: function(req, res){
     Ozet.find().exec(function(err, News){
-
       res.view('user/home', { News: News });
     });
   }

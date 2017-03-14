@@ -10,8 +10,7 @@ module.exports.routes = {
   'post /login': 'UserController.login',
   'post /signup': 'UserController.signup',
   '/logout': 'UserController.logout',
-  'get /home': 'UserController.control',
-  'get /home': 'UserController.getNews',
+  'get /home': 'UserController.checkSession',
   'post /home/new': 'UserController.new'
 
 
