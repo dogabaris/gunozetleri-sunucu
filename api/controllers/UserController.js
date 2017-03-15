@@ -101,22 +101,59 @@ module.exports = {
     * `UserController.new()`
     */
   new: function(req, res){
-    Ozet.new({
-      title: req.param('title'),
-      news: req.param('news'),
-      imagePath: req.param('imagePath'),
-      date: req.param('date'),
-      state: req.param('state'),
-      who: req.param('who')
-    }, function (err, news) {
 
-      if (err) return res.negotiate(err);
 
-      if (req.wantsJSON) {
-        return res.ok('Başarıyla Eklendi!');
-      }
+    // Node defaults to 2 minutes.
+    res.setTimeout(0);
 
-      return res.view('user/home');
+      //maks 10mb upload
+      req.file('image').upload({maxBytes: 10000000}, function (err, uploadedFiles) {
+        if (err) return res.send(500, err);
+        else {
+          Ozet.new({
+            title: req.param('title'),
+            news: req.param('news'),
+            imagePath: uploadedFiles[0].fd,
+            date: req.param('date'),
+            state: req.param('state'),
+            who: req.session.me   //ekleyen kullanıcının id'si
+          }, function (err, news) {
+
+            if (err) return res.negotiate(err);
+
+            if (req.wantsJSON) {
+              return res.ok('Başarıyla Eklendi!');
+            }
+
+            return res.view('user/home');
+          });
+        }
+      });
+
+  },
+
+  /**
+   * `UserController.uploadImage()`
+   */
+  uploadImage: function (req, res) {
+
+    // 0 => infinite
+    // 240000 => 4 minutes (240,000 miliseconds)
+    // Node defaults to 2 minutes.
+    res.setTimeout(0);
+
+    req.file('image').upload({
+
+      // You can apply a file upload limit (in bytes)
+      maxBytes: 1000000,
+
+
+    }, function whenDone(err, uploadedFiles) {
+      if (err) return res.serverError(err);
+      else return res.json({
+        files: uploadedFiles,
+        textParams: req.allParams()
+      });
     });
   },
 
@@ -127,6 +164,10 @@ module.exports = {
     Ozet.find().exec(function(err, News){
       res.view('user/home', { News: News });
     });
+    //User.findOne({id: req.session.me}).exec(function(err, Name){
+    //  res.view('user/home', { Name: Name });
+    //});
+
   }
 
 };

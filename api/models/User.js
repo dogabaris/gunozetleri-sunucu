@@ -62,5 +62,9 @@ module.exports = {
       password: inputs.password
     })
     .exec(cb);
+  },
+
+  getName: function(inputs, cb){
+    User.findOne({id: inputs.id}).exec(cb);
   }
 };

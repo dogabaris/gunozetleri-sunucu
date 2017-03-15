@@ -15,59 +15,18 @@ $( function() {
   var dialog, form,
 
     emailRegex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/,
-    baslik = $( "#baslik" ),
-    haber = $( "#haber" ),
-    gorsel = $( "#gorsel" ),
-    tarih = $( "#tarih" ).find("input"),
-    allFields = $( [] ).add( baslik ).add( haber ).add( gorsel ).add( tarih ),
+    title = $( "#title" ),
+    news = $( "#news" ),
+    image = $( "#image" ),
+    date = $( "#date" ).find("input"),
+    allFields = $( [] ).add( title ).add( news ).add( image ).add( date ),
     tips = $( ".svalidateTips" );
 
-  function updateTips( t ) {
-    tips
-      .text( t )
-      .addClass( "ui-state-highlight" );
-    setTimeout(function() {
-      tips.removeClass( "ui-state-highlight", 1500 );
-    }, 500 );
-  }
-
-  function checkRegexp( o, regexp, n ) {
-    if ( !( regexp.test( o.val() ) ) ) {
-      o.addClass( "ui-state-error" );
-      updateTips( n );
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  function checkForm(form)
-  {
-    // validation fails if the input is blank
-    if(form.inputfield.value == "") {
-      alert("Error: Input is empty!");
-      form.inputfield.focus();
-      return false;
-    }
-
-    // regular expression to match only alphanumeric characters and spaces
-    var re = /^[\w ]+$/;
-
-    // validation fails if the input doesn't match our regular expression
-    if(!re.test(form.inputfield.value)) {
-      alert("Karakter hatası!");
-      form.inputfield.focus();
-      return false;
-    }
-
-    // validation was successful
-    return true;
-  }
 
   function Validate()
   {
       var msg= "",
-          fields = document.getElementById("dialog-form").getElementsByTagName("input");
+          fields = document.getElementById("dialog-form").querySelectorAll('input, textarea');
 
       for (var i=0; i<fields.length; i++){
           if (fields[i].value == "")
@@ -86,21 +45,44 @@ $( function() {
 
      if(Validate()){
 
-       $.post( "/home/new", { title: baslik.val(), news: haber.val(), imagePath: gorsel.val(), date: tarih.val(), state: "Beklemede", who: "Admin" })
+       event.preventDefault();
+       var formData = new FormData($("#dialog-data")[0]);
+
+       $.ajax({
+        url: '/home/new',
+        type: 'POST',
+        data: formData,
+        async: false,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (returndata) {
+          alert( "Data Loaded: " + returndata );
+
+          $( "#tablo tbody" ).append( "<tr>" +
+            "<td>" + title.val() + "</td>" +
+            "<td>" + news.val() + "</td>" +
+            "<td>" + image.val() + "</td>" +
+            "<td>" + date.val() + "</td>" +
+            "<td>" + "Beklemede" + "</td>" +
+            "<td>" + <%= req.session.me %> + "</td>" +
+            "<td>" + '<a href="#" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-edit">' + "</td>" +
+          "</tr>" );
+          dialog.dialog( "close" );
+        },
+        error: function(er){
+          alert( "Gönderilemedi!" );
+        }
+
+      });
+
+
+       /*$.post(  "/home/new", { title: baslik.val(), news: haber.val(), imagePath: gorsel.val(), date: tarih.val(), state: "Beklemede", who: <%= req.session.me %> })
         .done(function( data ) {
          alert( "Data Loaded: " + data );
-       });
+       });*/
 
-        $( "#tablo tbody" ).append( "<tr>" +
-          "<td>" + baslik.val() + "</td>" +
-          "<td>" + haber.val() + "</td>" +
-          "<td>" + gorsel.val() + "</td>" +
-          "<td>" + tarih.val() + "</td>" +
-          "<td>" + "Beklemede" + "</td>" +
-          "<td>" + "Admin" + "</td>" +
-          "<td>" + '<a href="#" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-edit">' + "</td>" +
-        "</tr>" );
-        dialog.dialog( "close" );
+
       }
 
   }
@@ -118,7 +100,6 @@ $( function() {
     },
     close: function() {
       form[ 0 ].reset();
-      allFields.removeClass( "ui-state-error" );
     }
   });
 
@@ -140,7 +121,7 @@ $( function() {
   $(document).ready(function() {
         $(function () {
 
-            $('#tarih').datetimepicker({
+            $('#date').datetimepicker({
                 useCurrent: true,
                 format: 'D/MM/YYYY HH:mm',
                 locale: 'tr'
@@ -160,7 +141,7 @@ $( function() {
 
       <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#menu-div" aria-expanded="false">
-          <span class="sr-only">Toggle navigation</span>
+          <span class="sr-only">Menü</span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
@@ -213,7 +194,7 @@ $( function() {
       <tr>
         <td><%= New.title %></td>
         <td><%= New.news %></td>
-        <td><%= New.imagePath %></td>
+        <td><img src="<%= New.imagePath %>" alt="><%= New.imagePath %>"><%= New.imagePath %></td>
         <td><%= New.date %></td>
         <td><%= New.state %></td>
         <td><%= New.who %></td>
@@ -224,37 +205,40 @@ $( function() {
   </table>
 </div>
 
-
-<div id="dialog-form" title="Yeni Özet" hidden="hidden">
+<div id="dialog-form" title="Yeni Özet" hidden="hidden" >
   <p class="validateTips">Alanlar doldurulmalıdır.</p>
 
-  <form>
+  <form id="dialog-data" action="file/upload" method="post" enctype="multipart/form-data">
      <div class="form-group">
-      <label for="baslik">Başlık</label>
-      <input type="text" name="baslik" id="baslik" class="form-control" >
+      <label for="title">Başlık</label>
+      <input type="text" name="title" id="title" class="form-control" >
     </div>
     <div class="form-group">
-      <label for="haber">Haber</label>
-      <textarea class="form-control" rows="5" name="haber" id="haber" ></textarea>
+      <label for="news">Haber</label>
+      <textarea class="form-control" rows="5" name="news" id="news" ></textarea>
     </div>
     <div class="form-group">
-      <label for="gorsel">Görsel</label>
-      <input type="text" name="gorsel" id="gorsel" class="form-control">
+      <label for="image">Görsel</label>
+      <input type="file" id="image" name="image" />
     </div>
     <div class="form-group">
-      <label for="tarih">Tarih</label>
-      <div class='input-group date' id='tarih'>
-          <input type='text' class="form-control" />
+      <label for="date">Tarih</label>
+      <div class='input-group date' id='date'>
+          <input type='text' name='date' class="form-control" />
             <span class="input-group-addon">
                 <span class="glyphicon glyphicon-calendar" ></span>
             </span>
       </div>
     </div>
     <div class="form-group">
-      <label for="ekleyen">Ekleyen</label>
-      <input type='text' class="form-control" name="ekleyen" id="ekleyen"/>
+      <label for="state">Durum</label>
+      <input readonly class="form-control" type="text" name="state" id="state" value="Beklemede"/>
     </div>
-      <button type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+    <div class="form-group">
+      <label for="who">Ekleyen</label>
+      <input readonly type="text" class="form-control" name="who" id="who" value="<%= req.session.me %>" />
+    </div>
+      <button type="submit" tabindex="-1" style="position:absolute; top:-1000px">Gönder</button>
   </form>
 </div>
 

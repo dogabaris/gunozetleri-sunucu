@@ -25,7 +25,7 @@ module.exports.policies = {
     '*': 'isAuthenticated',
     login: true,
     signup: true,
-    control: true,
+    checkSession: true,
     new: true,
     getName: true,
     getNews: true
