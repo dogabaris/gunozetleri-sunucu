@@ -61,6 +61,7 @@ module.exports = {
       // We do this by "remembering" the user in the session.
       // Subsequent requests from this user agent will have `req.session.me` set.
       req.session.me = user.id;
+      req.session.me.user = user.name;
 
       // If this is not an HTML-wanting browser, e.g. AJAX/sockets/cURL/etc.,
       // send a 200 response letting the user agent know the signup was successful.
@@ -116,7 +117,7 @@ module.exports = {
             imagePath: uploadedFiles[0].fd,
             date: req.param('date'),
             state: req.param('state'),
-            who: req.session.me   //ekleyen kullanıcının id'si
+            who: req.param('who')  //ekleyen kullanıcının id'si
           }, function (err, news) {
 
             if (err) return res.negotiate(err);
@@ -161,9 +162,18 @@ module.exports = {
    * `UserController.getNews()`
    */
   getNews: function(req, res){
-    Ozet.find().exec(function(err, News){
-      res.view('user/home', { News: News });
+
+    User.findOne({id: req.session.me}).exec(function(err, userName){
+      var name="bulunamadı";
+      name = userName.name;
+      //sails.log('Found "%s"', name);
+
+      Ozet.find().exec(function(err, News){
+        res.view('user/home', { News: News, name: name });
+      });
+
     });
+
     //User.findOne({id: req.session.me}).exec(function(err, Name){
     //  res.view('user/home', { Name: Name });
     //});

@@ -16,8 +16,8 @@
 //  to change `assets/styles/importer.less` instead.)
 var cssFilesToInject = [
 
-  'styles/jquery-ui.css'
   'styles/bootstrap.min.css',
+  'styles/jquery-ui.css',
   'styles/bootstrap-datetimepicker.min.css',
   'styles/**/*.css'
 ];
@@ -29,9 +29,8 @@ var jsFilesToInject = [
 
   // Load sails.io before everything else
   'js/dependencies/sails.io.js',
-  'js/dependencies/jquery-3.1.1.js',
-  'js/dependencies/jquery-ui.min.js',
   'js/dependencies/bootstrap.min.js',
+  'js/dependencies/jquery-ui.min.js',
   'js/dependencies/bootstrap.datetimepicker.min.js',
 
   // Dependencies like jQuery, or Angular are brought in here

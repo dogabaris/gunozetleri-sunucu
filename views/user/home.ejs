@@ -2,9 +2,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+
 
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
@@ -65,7 +66,7 @@ $( function() {
             "<td>" + image.val() + "</td>" +
             "<td>" + date.val() + "</td>" +
             "<td>" + "Beklemede" + "</td>" +
-            "<td>" + <%= req.session.me %> + "</td>" +
+            "<td>" + "<%= name %>" + "</td>" +
             "<td>" + '<a href="#" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-edit">' + "</td>" +
           "</tr>" );
           dialog.dialog( "close" );
@@ -194,7 +195,7 @@ $( function() {
       <tr>
         <td><%= New.title %></td>
         <td><%= New.news %></td>
-        <td><img src="<%= New.imagePath %>" alt="><%= New.imagePath %>"><%= New.imagePath %></td>
+        <td><%= New.imagePath %></td>
         <td><%= New.date %></td>
         <td><%= New.state %></td>
         <td><%= New.who %></td>
@@ -236,7 +237,7 @@ $( function() {
     </div>
     <div class="form-group">
       <label for="who">Ekleyen</label>
-      <input readonly type="text" class="form-control" name="who" id="who" value="<%= req.session.me %>" />
+      <input readonly type="text" class="form-control" name="who" id="who" value="<%= name %>" />
     </div>
       <button type="submit" tabindex="-1" style="position:absolute; top:-1000px">Gönder</button>
   </form>
@@ -245,11 +246,10 @@ $( function() {
 
 <!--SCRIPTS-->
 <script src="/js/dependencies/sails.io.js"></script>
-<script src="/js/dependencies/jquery-ui.min.js"></script>
 <script src="/js/dependencies/bootstrap.min.js"></script>
+<script src="/js/dependencies/jquery-ui.min.js"></script>
 <script src="/js/dependencies/bootstrap-datetimepicker.min.js"></script>
 <!--SCRIPTS END-->
-
 
 
 </body>
