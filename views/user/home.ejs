@@ -6,7 +6,6 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
 
-
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment-with-locales.min.js"></script>
@@ -20,6 +19,8 @@ $( function() {
     news = $( "#news" ),
     image = $( "#image" ),
     date = $( "#date" ).find("input"),
+    state = $( "#state" ),
+    who = $( "#who" ),
     allFields = $( [] ).add( title ).add( news ).add( image ).add( date ),
     tips = $( ".svalidateTips" );
 
@@ -47,41 +48,79 @@ $( function() {
      if(Validate()){
 
        event.preventDefault();
-       var formData = new FormData($("#dialog-data")[0]);
+       var formData  = new FormData($("#dialog-data")[0]);
+       formData.append('date', date.val());
+       formData.append('state', state.val());
+       formData.append('who', who.val());
+       var formData2 = new FormData($("#dialog-data2")[0]);
+       formData2.append('date', date.val());
+       formData2.append('state', state.val());
+       formData2.append('who', who.val());
+       var formData3 = new FormData($("#dialog-data3")[0]);
+       formData3.append('date', date.val());
+       formData3.append('state', state.val());
+       formData3.append('who', who.val());
+       var formData4 = new FormData($("#dialog-data4")[0]);
+       formData4.append('date', date.val());
+       formData4.append('state', state.val());
+       formData4.append('who', who.val());
+       var formData5 = new FormData($("#dialog-data5")[0]);
+       formData5.append('date', date.val());
+       formData5.append('state', state.val());
+       formData5.append('who', who.val());
 
-       $.ajax({
-        url: '/home/new',
-        type: 'POST',
-        data: formData,
-        async: false,
-        cache: false,
-        contentType: false,
-        processData: false,
-        success: function (returndata) {
-          alert( "Data Loaded: " + returndata );
+       var formDatas = new Array();
+       formDatas.push(formData);
+       formDatas.push(formData2);
+       formDatas.push(formData3);
+       formDatas.push(formData4);
+       formDatas.push(formData5);
 
-          $( "#tablo tbody" ).append( "<tr>" +
-            "<td>" + title.val() + "</td>" +
-            "<td>" + news.val() + "</td>" +
-            "<td>" + image.val() + "</td>" +
-            "<td>" + date.val() + "</td>" +
-            "<td>" + "Beklemede" + "</td>" +
-            "<td>" + "<%= name %>" + "</td>" +
-            "<td>" + '<a href="#" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-edit">' + "</td>" +
-          "</tr>" );
-          dialog.dialog( "close" );
-        },
-        error: function(er){
-          alert( "Gönderilemedi!" );
+       for (var pair of formData) {
+            console.log(pair[0]+ ', ' + pair[1]);
+       }
+       for (var pair of formData2) {
+            console.log(pair[0]+ ', ' + pair[1]);
+       }
+       for (var pair of formData3) {
+            console.log(pair[0]+ ', ' + pair[1]);
+       }
+       for (var pair of formData4) {
+            console.log(pair[0]+ ', ' + pair[1]);
+       }
+       for (var pair of formData5) {
+            console.log(pair[0]+ ', ' + pair[1]);
+       }
+
+        for (i = 0; i < 5; i++) {
+            $.ajax({
+             url: '/home/new',
+             type: 'POST',
+             data: formDatas[i],
+             async: false,
+             cache: false,
+             contentType: false,
+             processData: false,
+             success: function (returndata) {
+               alert( "Data Loaded: " + returndata );
+               console.log(i);
+
+               $( "#tablo tbody" ).append( "<tr>" +
+                 "<td>" + title.val() + "</td>" +
+                 "<td>" + news.val() + "</td>" +
+                 "<td>" + image.val() + "</td>" +
+                 "<td>" + date.val() + "</td>" +
+                 "<td>" + "Beklemede" + "</td>" +
+                 "<td>" + "<%= name %>" + "</td>" +
+                 "<td>" + '<a href="#" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-edit">' + "</td>" +
+               "</tr>" );
+               dialog.dialog( "close" );
+             },
+             error: function(er){
+               alert( "Gönderilemedi!" );
+             }
+           });
         }
-
-      });
-
-
-       /*$.post(  "/home/new", { title: baslik.val(), news: haber.val(), imagePath: gorsel.val(), date: tarih.val(), state: "Beklemede", who: <%= req.session.me %> })
-        .done(function( data ) {
-         alert( "Data Loaded: " + data );
-       });*/
 
 
       }
@@ -90,9 +129,17 @@ $( function() {
 
   dialog = $( "#dialog-form" ).dialog({
     autoOpen: false,
-    height: 400,
-    width: 350,
+    width: $(window).height(),
     modal: true,
+    open: function(){
+      $('#ozetler').tabs({
+            create: function(e, ui) {
+                $('#closeBtn').click(function() {
+                    $('#dialog-form').dialog('close');
+                });
+            }
+        });
+    },
     buttons: {
       "Yayınla": ozetEkle,
       Kapat: function() {
@@ -100,11 +147,17 @@ $( function() {
       }
     },
     close: function() {
-      form[ 0 ].reset();
+      $("#ozetler input:text, textarea, image").val("");
+
+      $(this).find('form')[0].reset();
+      $(this).find('form')[1].reset();
+      $(this).find('form')[2].reset();
+      $(this).find('form')[3].reset();
+      $(this).find('form')[4].reset();
     }
   });
 
-  form = dialog.find( "form" ).on( "submit", function( event ) {
+  form = dialog.find( "ozetler" ).on( "submit", function( event ) {
     event.preventDefault();
     ozetEkle();
   });
@@ -119,17 +172,16 @@ $( function() {
 </script>
 
 <script type="text/javascript">
-  $(document).ready(function() {
+
         $(function () {
 
             $('#date').datetimepicker({
-                useCurrent: true,
-                format: 'D/MM/YYYY HH:mm',
+                useCurrent: false,
+                format: 'DD/MM/YYYY HH:mm',
                 locale: 'tr'
             });
-
         });
-  });
+
 </script>
 
 </head>
@@ -206,41 +258,115 @@ $( function() {
   </table>
 </div>
 
-<div id="dialog-form" title="Yeni Özet" hidden="hidden" >
-  <p class="validateTips">Alanlar doldurulmalıdır.</p>
+<div id="dialog-form" title="Yeni Özet" class="ui-helper-hidden">
+  <div id="ozetler">
+    <ul>
+     <li><a href="#dialog-data">Özet 1</a></li>
+     <li><a href="#dialog-data2">Özet 2</a></li>
+     <li><a href="#dialog-data3">Özet 3</a></li>
+     <li><a href="#dialog-data4">Özet 4</a></li>
+     <li><a href="#dialog-data5">Özet 5</a></li>
+    </ul>
 
-  <form id="dialog-data" action="file/upload" method="post" enctype="multipart/form-data">
-     <div class="form-group">
-      <label for="title">Başlık</label>
-      <input type="text" name="title" id="title" class="form-control" >
-    </div>
-    <div class="form-group">
-      <label for="news">Haber</label>
-      <textarea class="form-control" rows="5" name="news" id="news" ></textarea>
-    </div>
-    <div class="form-group">
-      <label for="image">Görsel</label>
-      <input type="file" id="image" name="image" />
-    </div>
-    <div class="form-group">
-      <label for="date">Tarih</label>
-      <div class='input-group date' id='date'>
-          <input type='text' name='date' class="form-control" />
-            <span class="input-group-addon">
-                <span class="glyphicon glyphicon-calendar" ></span>
-            </span>
+      <form id="dialog-data" action="file/upload" method="post" enctype="multipart/form-data">
+         <div class="form-group">
+          <label for="title">Başlık</label>
+          <input type="text" name="title" id="title" class="form-control" >
+        </div>
+        <div class="form-group">
+          <label for="news">Haber</label>
+          <textarea class="form-control" rows="5" name="news" id="news" ></textarea>
+        </div>
+        <div class="form-group">
+          <label for="image">Görsel</label>
+          <input type="file" id="image" name="image" />
+        </div>
+
+      </form>
+
+      <form id="dialog-data2" action="file/upload" method="post" enctype="multipart/form-data">
+         <div class="form-group">
+          <label for="title">Başlık</label>
+          <input type="text" name="title" id="title" class="form-control" >
+        </div>
+        <div class="form-group">
+          <label for="news">Haber</label>
+          <textarea class="form-control" rows="5" name="news" id="news" ></textarea>
+        </div>
+        <div class="form-group">
+          <label for="image">Görsel</label>
+          <input type="file" id="image" name="image" />
+        </div>
+
+      </form>
+
+      <form id="dialog-data3" action="file/upload" method="post" enctype="multipart/form-data">
+         <div class="form-group">
+          <label for="title">Başlık</label>
+          <input type="text" name="title" id="title" class="form-control" >
+        </div>
+        <div class="form-group">
+          <label for="news">Haber</label>
+          <textarea class="form-control" rows="5" name="news" id="news" ></textarea>
+        </div>
+        <div class="form-group">
+          <label for="image">Görsel</label>
+          <input type="file" id="image" name="image" />
+        </div>
+
+      </form>
+
+      <form id="dialog-data4" action="file/upload" method="post" enctype="multipart/form-data">
+         <div class="form-group">
+          <label for="title">Başlık</label>
+          <input type="text" name="title" id="title" class="form-control" >
+        </div>
+        <div class="form-group">
+          <label for="news">Haber</label>
+          <textarea class="form-control" rows="5" name="news" id="news" ></textarea>
+        </div>
+        <div class="form-group">
+          <label for="image">Görsel</label>
+          <input type="file" id="image" name="image" />
+        </div>
+
+      </form>
+
+      <form id="dialog-data5" action="file/upload" method="post" enctype="multipart/form-data">
+         <div class="form-group">
+          <label for="title">Başlık</label>
+          <input type="text" name="title" id="title" class="form-control" >
+        </div>
+        <div class="form-group">
+          <label for="news">Haber</label>
+          <textarea class="form-control" rows="5" name="news" id="news" ></textarea>
+        </div>
+        <div class="form-group">
+          <label for="image">Görsel</label>
+          <input type="file" id="image5" name="image" />
+        </div>
+      </form>
+
+      <div class="form-group">
+        <label for="date">Tarih</label>
+        <div class='input-group date' id='date'>
+            <input type='text' name='date' class="form-control" />
+              <span class="input-group-addon">
+                  <span class="glyphicon glyphicon-calendar" ></span>
+              </span>
+        </div>
       </div>
-    </div>
-    <div class="form-group">
-      <label for="state">Durum</label>
-      <input readonly class="form-control" type="text" name="state" id="state" value="Beklemede"/>
-    </div>
-    <div class="form-group">
-      <label for="who">Ekleyen</label>
-      <input readonly type="text" class="form-control" name="who" id="who" value="<%= name %>" />
-    </div>
-      <button type="submit" tabindex="-1" style="position:absolute; top:-1000px">Gönder</button>
-  </form>
+      <div class="form-group">
+        <label for="state">Durum</label>
+        <input readonly class="form-control" type="text" name="state" id="state" value="Beklemede"/>
+      </div>
+      <div class="form-group">
+        <label for="who">Ekleyen</label>
+        <input readonly type="text" class="form-control" name="who" id="who" value="<%= name %>" />
+      </div>
+
+      <button type="submit" tabindex="-1" style="position:absolute;" hidden="hidden">Gönder</button>
+  </div>
 </div>
 
 
