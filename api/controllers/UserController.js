@@ -108,13 +108,23 @@ module.exports = {
     res.setTimeout(0);
 
       //maks 10mb upload
-      req.file('image').upload({maxBytes: 10000000}, function (err, uploadedFiles) {
+      req.file('image').upload({maxBytes: 10000000, dirname : process.cwd() + '/assets/images/uploads/'}, function (err, uploadedFiles) {
         if (err) return res.send(500, err);
         else {
+          var fs = require('fs');
+
+          var filename = uploadedFiles[0].fd.substring(uploadedFiles[0].fd.lastIndexOf('/')+1);
+          var uploadLocation = process.cwd() +'/assets/images/uploads/' + filename;
+          var tempLocation = process.cwd() + '/.tmp/uploads/' + filename;
+
+          //Copy the file to the temp folder so that it becomes available immediately
+          fs.createReadStream(uploadLocation).pipe(fs.createWriteStream(tempLocation));
+
           Ozet.new({
             title: req.param('title'),
             news: req.param('news'),
-            imagePath: uploadedFiles[0].fd,
+            //imagePath: uploadedFiles[0].fd,
+            imagePath: filename,
             date: req.param('date'),
             state: req.param('state'),
             who: req.param('who')  //ekleyen kullanıcının id'si
@@ -166,9 +176,8 @@ module.exports = {
     User.findOne({id: req.session.me}).exec(function(err, userName){
       var name="bulunamadı";
       name = userName.name;
-      //sails.log('Found "%s"', name);
 
-      Ozet.find().exec(function(err, News){
+      Ozet.find().limit(10).sort('updatedAt DESC').exec(function(err, News){
         res.view('user/home', { News: News, name: name });
       });
 
@@ -178,6 +187,8 @@ module.exports = {
     //  res.view('user/home', { Name: Name });
     //});
 
-  }
+  },
+
+
 
 };

@@ -69,59 +69,83 @@ $( function() {
        formData5.append('state', state.val());
        formData5.append('who', who.val());
 
-       var formDatas = new Array();
-       formDatas.push(formData);
-       formDatas.push(formData2);
-       formDatas.push(formData3);
-       formDatas.push(formData4);
-       formDatas.push(formData5);
-
-       for (var pair of formData) {
-            console.log(pair[0]+ ', ' + pair[1]);
-       }
-       for (var pair of formData2) {
-            console.log(pair[0]+ ', ' + pair[1]);
-       }
-       for (var pair of formData3) {
-            console.log(pair[0]+ ', ' + pair[1]);
-       }
-       for (var pair of formData4) {
-            console.log(pair[0]+ ', ' + pair[1]);
-       }
-       for (var pair of formData5) {
-            console.log(pair[0]+ ', ' + pair[1]);
-       }
-
-        for (i = 0; i < 5; i++) {
-            $.ajax({
-             url: '/home/new',
-             type: 'POST',
-             data: formDatas[i],
-             async: false,
-             cache: false,
-             contentType: false,
-             processData: false,
-             success: function (returndata) {
-               alert( "Data Loaded: " + returndata );
-               console.log(i);
-
-               $( "#tablo tbody" ).append( "<tr>" +
-                 "<td>" + title.val() + "</td>" +
-                 "<td>" + news.val() + "</td>" +
-                 "<td>" + image.val() + "</td>" +
-                 "<td>" + date.val() + "</td>" +
-                 "<td>" + "Beklemede" + "</td>" +
-                 "<td>" + "<%= name %>" + "</td>" +
-                 "<td>" + '<a href="#" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-edit">' + "</td>" +
-               "</tr>" );
-               dialog.dialog( "close" );
-             },
-             error: function(er){
-               alert( "Gönderilemedi!" );
-             }
-           });
+        $.ajax({
+         url: '/home/new',
+         type: 'POST',
+         data: formData,
+         async: false,
+         cache: false,
+         contentType: false,
+         processData: false,
+         success: function (returndata) {
+           dialog.dialog( "close" );
+         },
+         error: function(er){
+           alert( "Gönderilemedi!" );
+         }
+       });
+       $.ajax({
+        url: '/home/new',
+        type: 'POST',
+        data: formData2,
+        async: false,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (returndata) {
+          dialog.dialog( "close" );
+        },
+        error: function(er){
+          alert( "Gönderilemedi!" );
         }
+      });
+        $.ajax({
+         url: '/home/new',
+         type: 'POST',
+         data: formData3,
+         async: false,
+         cache: false,
+         contentType: false,
+         processData: false,
+         success: function (returndata) {
+           dialog.dialog( "close" );
+         },
+         error: function(er){
+           alert( "Gönderilemedi!" );
+         }
+       });
+       $.ajax({
+        url: '/home/new',
+        type: 'POST',
+        data: formData4,
+        async: false,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (returndata) {
+          dialog.dialog( "close" );
+        },
+        error: function(er){
+          alert( "Gönderilemedi!" );
+        }
+      });
+      $.ajax({
+       url: '/home/new',
+       type: 'POST',
+       data: formData5,
+       async: false,
+       cache: false,
+       contentType: false,
+       processData: false,
+       success: function (returndata) {
+         dialog.dialog( "close" );
+       },
+       error: function(er){
+         alert( "Gönderilemedi!" );
+       }
+     });
 
+     location.reload(); //yüklendikten sonra sayfayı yeniler.
 
       }
 
