@@ -179,6 +179,7 @@ module.exports = {
 
       Ozet.find().limit(10).sort('updatedAt DESC').exec(function(err, News){
         res.view('user/home', { News: News, name: name });
+        
       });
 
     });

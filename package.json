@@ -20,9 +20,11 @@
     "grunt-sync": "~0.0.4",
     "include-all": "^4.0.0",
     "jquery": "^3.1.1",
+    "moment": "^2.18.1",
     "rc": "^1.1.7",
     "sails": "^0.11.5",
     "sails-disk": "^0.10.10",
+    "sails-hook-cron": "^2.2.0",
     "sails-mongo": "^0.12.2"
   },
   "scripts": {

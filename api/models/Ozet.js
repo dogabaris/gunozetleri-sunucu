@@ -1,5 +1,16 @@
 module.exports = {
-
+  /*autoCreatedAt: false,//kendi tarih formatımıza uygun yapmak için otomatik oluşturulan tarihler devre dışı bırakılıyor.
+  autoUpdatedAt: false,
+  createdAt: {
+    type: 'datetime',
+    required: true,
+    defaultsTo: function() {return new Date();}
+  },
+  updatedAt: {
+    type: 'datetime',
+    required: true,
+    defaultsTo: function() {return new Date();}
+  }*/
   attributes:{
     title: {
       type: 'string',
@@ -24,7 +35,8 @@ module.exports = {
     who: {
       type: 'string',
       required: true
-    }
+    },
+
   },
 
   new: function(inputs, cb){

@@ -153,7 +153,11 @@ $( function() {
 
   dialog = $( "#dialog-form" ).dialog({
     autoOpen: false,
-    width: $(window).height(),
+    width: $(window).width()-$(window).width()%20,
+    position: {
+               my: "center bottom",
+               at: "center top"
+             },
     modal: true,
     open: function(){
       $('#ozetler').tabs({
@@ -171,7 +175,8 @@ $( function() {
       }
     },
     close: function() {
-      $("#ozetler input:text, textarea, image").val("");
+      $("#ozetler textarea, image").val("");
+      $("#tarih input:text").val("");
 
       $(this).find('form')[0].reset();
       $(this).find('form')[1].reset();
@@ -271,7 +276,7 @@ $( function() {
       <tr>
         <td><%= New.title %></td>
         <td><%= New.news %></td>
-        <td><%= New.imagePath %></td>
+        <td><img style="vertical-align: bottom;" src="/images/uploads/<%= New.imagePath %>" alt="<%= New.imagePath %>"></td>
         <td><%= New.date %></td>
         <td><%= New.state %></td>
         <td><%= New.who %></td>
@@ -367,11 +372,11 @@ $( function() {
         </div>
         <div class="form-group">
           <label for="image">Görsel</label>
-          <input type="file" id="image5" name="image" />
+          <input type="file" id="image" name="image" />
         </div>
       </form>
 
-      <div class="form-group">
+      <div class="form-group" id="tarih">
         <label for="date">Tarih</label>
         <div class='input-group date' id='date'>
             <input type='text' name='date' class="form-control" />
