@@ -112,7 +112,7 @@ module.exports = {
 
           var filename = uploadedFiles[0].fd.substring(uploadedFiles[0].fd.lastIndexOf('/')+1);
           var uploadLocation = process.cwd() +'/assets/images/uploads/' + filename;
-          var tempLocation = process.cwd() + '/.tmp/uploads/' + filename;
+          var tempLocation = process.cwd() + '/.tmp/public/images/uploads/' + filename;
 
           //Copy the file to the temp folder so that it becomes available immediately
           fs.createReadStream(uploadLocation).pipe(fs.createWriteStream(tempLocation));
@@ -124,7 +124,8 @@ module.exports = {
             imagePath: filename,
             date: req.param('date'),
             state: req.param('state'),
-            who: req.param('who')  //ekleyen kullanıcının id'si
+            who: req.param('who'),  //ekleyen kullanıcının id'si
+            link: req.param('link')
           }, function (err, news) {
 
             if (err) return res.negotiate(err);
@@ -156,7 +157,7 @@ module.exports = {
 
           var filename = uploadedFile[0].fd.substring(uploadedFile[0].fd.lastIndexOf('/')+1);
           var uploadLocation = process.cwd() +'/assets/images/uploads/' + filename;
-          var tempLocation = process.cwd() + '/.tmp/uploads/' + filename;
+          var tempLocation = process.cwd() + '/.tmp/public/images/uploads/' + filename;
 
           //Copy the file to the temp folder so that it becomes available immediately
           fs.createReadStream(uploadLocation).pipe(fs.createWriteStream(tempLocation));
@@ -168,6 +169,7 @@ module.exports = {
             date: req.param('dateDuzenle'),
             state: req.param('stateDuzenle'),
             who: req.param('whoDuzenle'),
+            link: req.param('linkDuzenle'),
             id: req.param('idDuzenle')
           }, function (err, news) {
 

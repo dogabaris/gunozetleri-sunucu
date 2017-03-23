@@ -259,10 +259,12 @@ $( function() {
          tarih = satir.children("td:nth-child(4)");
          durum = satir.children("td:nth-child(5)");
          ekleyen = satir.children("td:nth-child(6)");
-         id = satir.children("td:nth-child(7)");
+         link = satir.children("td:nth-child(7)");
+         id = satir.children("td:nth-child(8)");
 
          $("#titleDuzenle").val(baslik.text());
          $("#newsDuzenle").val(haber.text());
+         $("#linkDuzenle").val(link.text());
          $("#dateDuzenle").val(tarih.text());
          $("#stateDuzenle").val(durum.text());
          $("#whoDuzenle").val('<%=name%>');
@@ -355,6 +357,7 @@ $( function() {
         <th>Tarih</th>
         <th>Durum</th>
         <th>Ekleyen</th>
+        <th>Link</th>
         <th>Id<th>
         <th></th>
       </tr>
@@ -368,6 +371,7 @@ $( function() {
         <td><%= New.date %></td>
         <td><%= New.state %></td>
         <td><%= New.who %></td>
+        <td><%= New.link %></td>
         <td><%= New.id %></td>
         <td><a href="#" id="duzenlebutton" class="duzenlebutton" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-edit"></span></a><td>
       </tr>
@@ -399,6 +403,10 @@ $( function() {
           <label for="image">Görsel</label>
           <input type="file" id="image" name="image" />
         </div>
+        <div class="form-group">
+         <label for="link">Link</label>
+         <input type="text" name="link" id="link" class="form-control" >
+       </div>
       </form>
 
       <form id="dialog-data2" action="file/upload" method="post" enctype="multipart/form-data">
@@ -414,6 +422,10 @@ $( function() {
           <label for="image">Görsel</label>
           <input type="file" id="image" name="image" />
         </div>
+        <div class="form-group">
+         <label for="link">Link</label>
+         <input type="text" name="link" id="link" class="form-control" >
+       </div>
       </form>
 
       <form id="dialog-data3" action="file/upload" method="post" enctype="multipart/form-data">
@@ -429,6 +441,10 @@ $( function() {
           <label for="image">Görsel</label>
           <input type="file" id="image" name="image" />
         </div>
+        <div class="form-group">
+         <label for="link">Link</label>
+         <input type="text" name="link" id="link" class="form-control" >
+       </div>
       </form>
 
       <form id="dialog-data4" action="file/upload" method="post" enctype="multipart/form-data">
@@ -444,6 +460,10 @@ $( function() {
           <label for="image">Görsel</label>
           <input type="file" id="image" name="image" />
         </div>
+        <div class="form-group">
+         <label for="link">Link</label>
+         <input type="text" name="link" id="link" class="form-control" >
+       </div>
       </form>
 
       <form id="dialog-data5" action="file/upload" method="post" enctype="multipart/form-data">
@@ -459,6 +479,10 @@ $( function() {
           <label for="image">Görsel</label>
           <input type="file" id="image" name="image" />
         </div>
+        <div class="form-group">
+         <label for="link">Link</label>
+         <input type="text" name="link" id="link" class="form-control" >
+       </div>
       </form>
 
       <div class="form-group" id="tarih">
@@ -502,7 +526,10 @@ $( function() {
           <label for="imageDuzenle">Görsel</label>
           <input type="file" id="imageDuzenle" name="imageDuzenle" />
         </div>
-
+        <div class="form-group">
+         <label for="linkDuzenle">Link</label>
+         <input type="text" name="linkDuzenle" id="linkDuzenle" class="form-control" >
+       </div>
       <div class="form-group" id="tarihDuzenle">
         <label for="date">Tarih</label>
         <div class='input-group date' >

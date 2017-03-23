@@ -24,7 +24,10 @@ module.exports = {
       type: 'string',
       required: true
     },
-
+    link: {
+      type: 'string',
+      required: true
+    }
   },
 
   new: function(inputs, cb){
@@ -34,7 +37,8 @@ module.exports = {
       imagePath: inputs.imagePath,
       date: inputs.date,
       state: inputs.state,
-      who: inputs.who
+      who: inputs.who,
+      link: inputs.link
     })
     .exec(cb);
   },
@@ -48,7 +52,8 @@ module.exports = {
       imagePath: inputs.imagePath,
       date: inputs.date,
       state: inputs.state,
-      who: inputs.who
+      who: inputs.who,
+      link: inputs.link
     })
     .exec(cb);
   },
