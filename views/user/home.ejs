@@ -69,6 +69,8 @@ $( function() {
        formData5.append('state', state.val());
        formData5.append('who', who.val());
 
+       console.log($("#image").val());
+
         $.ajax({
          url: '/home/new',
          type: 'POST',
@@ -79,6 +81,7 @@ $( function() {
          processData: false,
          success: function (returndata) {
            dialog.dialog( "close" );
+
          },
          error: function(er){
            alert( "Gönderilemedi!" );
@@ -153,7 +156,7 @@ $( function() {
 
   dialog = $( "#dialog-form" ).dialog({
     autoOpen: false,
-    width: $(window).width()-$(window).width()%20,
+    width: $(window).width(),
     position: {
                my: "center bottom",
                at: "center top"
@@ -198,12 +201,9 @@ $( function() {
 } );
 </script>
 
-</script>
-
 <script type="text/javascript">
 
         $(function () {
-
             $('#date').datetimepicker({
                 useCurrent: false,
                 format: 'DD/MM/YYYY HH:mm',
@@ -211,6 +211,95 @@ $( function() {
             });
         });
 
+</script>
+
+<script type="text/javascript">
+    $(function ()  {
+      var satir,baslik,haber,gorsel,tarih,durum,ekleyen,form,dialog,duzenleData;
+
+      dialog =  $( "#duzenle-form" ).dialog({
+         autoOpen: false,
+         width: $(window).width(),
+         position: {
+                    at: "center top"
+                  },
+         modal: true,
+         open: function(){
+           $('#duzenler').tabs({
+                 create: function(e, ui) {
+                     $('#closeBtn').click(function() {
+                         $('#duzenle-form').dialog('close');
+                     });
+                 }
+             });
+         },
+         buttons: {
+           "Yayınla": ozetDuzenle,
+           Kapat: function() {
+             dialog.dialog( "close" );
+           }
+         },
+         close: function() {
+           $("#duzenler textarea, image").val("");
+           $("#dateDuzenle input:text").val("");
+
+           $(this).find('form')[0].reset();
+         }
+       });
+
+       form = dialog.find( "duzenler" ).on( "submit", function( event ) {
+         event.preventDefault();
+         ozetDuzenle();
+       });
+
+       $( ".duzenlebutton" ).click( function() {
+         satir = $(this).parent().parent();
+         baslik = satir.children("td:nth-child(1)");
+         haber = satir.children("td:nth-child(2)");
+         tarih = satir.children("td:nth-child(4)");
+         durum = satir.children("td:nth-child(5)");
+         ekleyen = satir.children("td:nth-child(6)");
+         id = satir.children("td:nth-child(7)");
+
+         $("#titleDuzenle").val(baslik.text());
+         $("#newsDuzenle").val(haber.text());
+         $("#dateDuzenle").val(tarih.text());
+         $("#stateDuzenle").val(durum.text());
+         $("#whoDuzenle").val('<%=name%>');
+         $("#idDuzenle").val(id.text());
+
+         dialog.dialog( "open" );
+       });
+
+       function ozetDuzenle() {
+
+          event.preventDefault();
+          duzenleData  = new FormData($("#duzenle-data")[0]);
+
+          $.ajax({
+            url: '/home/update',
+            type: 'POST',
+            data: duzenleData,
+            async: false,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (returndata) {
+              dialog.dialog( "close" );
+            	satir.remove();
+              setTimeout(function(){
+                  location.reload();
+              },1500); //yüklendikten sonra sayfayı yeniler.
+            },
+            error: function(er){
+              alert( "Gönderilemedi!" );
+            }
+          });
+
+
+
+       }
+    });
 </script>
 
 </head>
@@ -237,8 +326,6 @@ $( function() {
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Menü <span class="caret"></span></a>
             <ul class="dropdown-menu">
               <li><a href="#">Menu1</a></li>
-              <li><a href="#">Menu2</a></li>
-              <li><a href="#">Menu3</a></li>
               <li role="separator" class="divider"></li>
               <li><a href="/logout">Çıkış</a></li>
             </ul>
@@ -268,6 +355,7 @@ $( function() {
         <th>Tarih</th>
         <th>Durum</th>
         <th>Ekleyen</th>
+        <th>Id<th>
         <th></th>
       </tr>
     </thead>
@@ -280,7 +368,8 @@ $( function() {
         <td><%= New.date %></td>
         <td><%= New.state %></td>
         <td><%= New.who %></td>
-        <td><a href="#" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-edit"></span></a><td>
+        <td><%= New.id %></td>
+        <td><a href="#" id="duzenlebutton" class="duzenlebutton" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-edit"></span></a><td>
       </tr>
       <% }); %>
     </tbody>
@@ -310,7 +399,6 @@ $( function() {
           <label for="image">Görsel</label>
           <input type="file" id="image" name="image" />
         </div>
-
       </form>
 
       <form id="dialog-data2" action="file/upload" method="post" enctype="multipart/form-data">
@@ -326,7 +414,6 @@ $( function() {
           <label for="image">Görsel</label>
           <input type="file" id="image" name="image" />
         </div>
-
       </form>
 
       <form id="dialog-data3" action="file/upload" method="post" enctype="multipart/form-data">
@@ -342,7 +429,6 @@ $( function() {
           <label for="image">Görsel</label>
           <input type="file" id="image" name="image" />
         </div>
-
       </form>
 
       <form id="dialog-data4" action="file/upload" method="post" enctype="multipart/form-data">
@@ -358,7 +444,6 @@ $( function() {
           <label for="image">Görsel</label>
           <input type="file" id="image" name="image" />
         </div>
-
       </form>
 
       <form id="dialog-data5" action="file/upload" method="post" enctype="multipart/form-data">
@@ -398,6 +483,51 @@ $( function() {
   </div>
 </div>
 
+<div id="duzenle-form" title="Özet Düzenle" class="ui-helper-hidden">
+  <div id="duzenler">
+    <ul>
+     <li><a href="#duzenle-data">Özet</a></li>
+    </ul>
+
+      <form id="duzenle-data" action="file/upload" method="post" enctype="multipart/form-data">
+         <div class="form-group">
+          <label for="titleDuzenle">Başlık</label>
+          <input type="text" name="titleDuzenle" id="titleDuzenle" class="form-control" >
+        </div>
+        <div class="form-group">
+          <label for="newsDuzenle">Haber</label>
+          <textarea class="form-control" rows="5" name="newsDuzenle" id="newsDuzenle" ></textarea>
+        </div>
+        <div class="form-group">
+          <label for="imageDuzenle">Görsel</label>
+          <input type="file" id="imageDuzenle" name="imageDuzenle" />
+        </div>
+
+      <div class="form-group" id="tarihDuzenle">
+        <label for="date">Tarih</label>
+        <div class='input-group date' >
+            <input type='text' name='dateDuzenle' id='dateDuzenle' class="form-control" />
+              <span class="input-group-addon">
+                  <span class="glyphicon glyphicon-calendar" ></span>
+              </span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="state">Durum</label>
+        <input readonly class="form-control" type="text" name="stateDuzenle" id="stateDuzenle" value=""/>
+      </div>
+      <div class="form-group">
+        <label for="who">Ekleyen</label>
+        <input readonly type="text" class="form-control" name="whoDuzenle" id="whoDuzenle" value="" />
+      </div>
+      <div class="form-group">
+        <label for="idDuzenle">Id</label>
+        <input readonly type="text" class="form-control" name="idDuzenle" id="idDuzenle" value="" />
+      </div>
+      </form>
+      <button type="submit" tabindex="-1" style="position:absolute;" hidden="hidden">Gönder</button>
+  </div>
+</div>
 
 <!--SCRIPTS-->
 <script src="/js/dependencies/sails.io.js"></script>
@@ -405,7 +535,6 @@ $( function() {
 <script src="/js/dependencies/jquery-ui.min.js"></script>
 <script src="/js/dependencies/bootstrap-datetimepicker.min.js"></script>
 <!--SCRIPTS END-->
-
 
 </body>
 </html>

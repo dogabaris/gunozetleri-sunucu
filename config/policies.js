@@ -27,8 +27,10 @@ module.exports.policies = {
     signup: true,
     checkSession: true,
     new: true,
+    update: true,
     getName: true,
     getNews: true
+
   }
 
 };

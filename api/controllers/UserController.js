@@ -1,6 +1,5 @@
 /**
  * UserController
-
  */
 
 module.exports = {
@@ -102,8 +101,6 @@ module.exports = {
     * `UserController.new()`
     */
   new: function(req, res){
-
-
     // Node defaults to 2 minutes.
     res.setTimeout(0);
 
@@ -128,6 +125,50 @@ module.exports = {
             date: req.param('date'),
             state: req.param('state'),
             who: req.param('who')  //ekleyen kullanıcının id'si
+          }, function (err, news) {
+
+            if (err) return res.negotiate(err);
+
+            if (req.wantsJSON) {
+              return res.ok('Başarıyla Eklendi!');
+            }
+
+            return res.view('user/home');
+          });
+        }
+      });
+
+  },
+
+  update: function(req, res){
+    // Node defaults to 2 minutes.
+    res.setTimeout(0);
+
+      req.file('imageDuzenle').upload({ dirname : process.cwd() + '/assets/images/uploads/'}, function (err, uploadedFile) {
+        if (err) return res.send(500, err);
+        else {
+          var fs = require('fs');
+
+          if (uploadedFile[0] == null){
+              return res.view('user/home');
+          }
+
+
+          var filename = uploadedFile[0].fd.substring(uploadedFile[0].fd.lastIndexOf('/')+1);
+          var uploadLocation = process.cwd() +'/assets/images/uploads/' + filename;
+          var tempLocation = process.cwd() + '/.tmp/uploads/' + filename;
+
+          //Copy the file to the temp folder so that it becomes available immediately
+          fs.createReadStream(uploadLocation).pipe(fs.createWriteStream(tempLocation));
+
+          Ozet.edit({
+            title: req.param('titleDuzenle'),
+            news: req.param('newsDuzenle'),
+            imagePath: filename,
+            date: req.param('dateDuzenle'),
+            state: req.param('stateDuzenle'),
+            who: req.param('whoDuzenle'),
+            id: req.param('idDuzenle')
           }, function (err, news) {
 
             if (err) return res.negotiate(err);
@@ -177,9 +218,9 @@ module.exports = {
       var name="bulunamadı";
       name = userName.name;
 
-      Ozet.find().limit(10).sort('updatedAt DESC').exec(function(err, News){
+      Ozet.find().limit(15).sort('updatedAt DESC').exec(function(err, News){
         res.view('user/home', { News: News, name: name });
-        
+
       });
 
     });

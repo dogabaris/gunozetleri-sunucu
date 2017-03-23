@@ -1,16 +1,4 @@
 module.exports = {
-  /*autoCreatedAt: false,//kendi tarih formatımıza uygun yapmak için otomatik oluşturulan tarihler devre dışı bırakılıyor.
-  autoUpdatedAt: false,
-  createdAt: {
-    type: 'datetime',
-    required: true,
-    defaultsTo: function() {return new Date();}
-  },
-  updatedAt: {
-    type: 'datetime',
-    required: true,
-    defaultsTo: function() {return new Date();}
-  }*/
   attributes:{
     title: {
       type: 'string',
@@ -51,8 +39,18 @@ module.exports = {
     .exec(cb);
   },
 
-  edit: function(){
-
+  edit: function(inputs, cb){
+    Ozet.update({
+      id: inputs.id
+    },{
+      title: inputs.title,
+      news: inputs.news,
+      imagePath: inputs.imagePath,
+      date: inputs.date,
+      state: inputs.state,
+      who: inputs.who
+    })
+    .exec(cb);
   },
 
   getNews: function (inputs, cb) {
