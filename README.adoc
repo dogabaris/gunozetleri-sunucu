@@ -1,0 +1,75 @@
+= Node.JS ve MongoDB Kurulumu
+
+Bu dökümanda Node.js ve MongoDB kurulum ve verilerin içeri aktarılması anlatılacaktır. 
+
+== Node.js
+
+Node.js'in 7.7.1 versiyonu Arch linux üzerine x64 versiyonu kullanılmıştır.
+
+Node.js kurulumu Arch linux'un pacman paket yöneticisiyle "sudo pacman -S nodejs" komutuyla indirilip kurulmuştur.
+
+Npm'in 4.3.0 versiyonu kullanılmıştır.
+
+== MongoDB
+
+MongoDB'nin  Community ve Enterprise olmak üzere iki sürümü bulunmaktadır. 
+
+Geçmiş senelerde hazırlanmış bitirme tezlerinin içerisinde mongodb ile ilgili açıklamalar [] kaynak belirtilerek eklenecek fakat güncel olmayan bilgiler güncelleştirilecektir. 
+
+
+MongoDB'nin 3.4.1 versiyonu pacman paket yöneticisiyle "sudo pacman -S mongodb" komutuyla kurulmuştur.
+
+MongoDB kurulumu varsayılan olarak gelen ayarlarda "/var/lib/mongodb/" klasörüne kurulmuştur.
+
+MongoDB sunucusunun çalıştırılması için açılan terminalde
+[source,]
+----
+mongo --dbpath='veritabanının bulunduğu yer'
+----
+
+komutu girilmelidir.
+
+=== MongoDB'de Verilerin İçe Aktarılması
+
+MongoDB'de verileri içe aktarmak için "mongoimport" komutu kullanılmaktadır. Bu komut veritabanı adı, koleksiyon adı, dosya tipi ve dosya adresi parametrelerini almaktadır. 
+
+İçe aktarılacak dosya ".csv" uzantılı bir dosyadır. Dosya içerisindeki veriler "," ile sütunlara ayrılmıştır. Sütun başlıkları en üst satıra yine "," ile ayrılmış olarak eklenmiş olmalıdır.
+
+İçe aktarım için aşağıdaki komut çalıştırılmalıdır.
+
+[source,]
+----
+mongoimport -d panel -c datas --type csv --headerline export.csv
+----
+
+Bu komuttaki "-d" parametresi veritabanı adı, "-c" parametresi koleksiyon adı, "--type" içe aktarılan dosya tipi, "--headerline" ise içe aktarılacak dosyayı temsil eder.
+
+=== Nodejs ile geliştirilmiş projenin çalıştırılması
+
+Projenin bulunduğu klasöre girilip terminal çalıştırıldığında
+
+[source,]
+----
+sails lift
+----
+
+ya da
+
+[source,]
+----
+node app.js
+----
+
+komutlarıyla localhostta proje çalışıtırabilir.
+
+=== Yetki ayarları
+
+Sailsjs çalıştırıldığında otomatik olarak .tmp klasörü oluşturulur. Geçici dosyalar, yüklenen görseller, cssler, js dosyaları burada tutulur. Kullanıcının proje çalıştırıldığında otomatik oluşturulan .tmp klasörüne okuma yazma izni yoksa, yeni özet görselleri yüklenemeyecektir. Bunun önüne geçmek için
+
+[source,]
+----
+sudo chmod -R 777 "projenin klasörü bulunduğu yol"
+----
+
+komutu girilerek izinler alınır. Projeye yeniden çalıştırıldığında sorun kalmayacaktır.
+
