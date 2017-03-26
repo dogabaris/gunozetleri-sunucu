@@ -46,7 +46,14 @@ Bu komuttaki "-d" parametresi veritabanı adı, "-c" parametresi koleksiyon adı
 
 === Nodejs ile geliştirilmiş projenin çalıştırılması
 
-Projenin bulunduğu klasöre girilip terminal çalıştırıldığında
+Proje çalıştırılmadan önce node paketleri indirilmelidir. Paketlerin indirilmesi için proje klasöründe açılan terminale
+
+[source,]
+----
+npm install
+----
+
+komutu girilerek node paketlerinin yüklenmesi gereklidir. Projenin ayağa kaldırılması için projenin bulunduğu klasöre girilip terminale
 
 [source,]
 ----
@@ -60,7 +67,7 @@ ya da
 node app.js
 ----
 
-komutlarıyla localhostta proje çalışıtırabilir.
+komutlarından biri girilir. Proje http://localhost:1337 portunda çalışmaya başlar.
 
 === Yetki ayarları
 
